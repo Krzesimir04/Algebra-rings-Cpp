@@ -35,7 +35,7 @@ class Ring{
          */
         static int inverse(const unsigned int y){
             if(gcd(y) != 1){
-                throw "there is no inverse for that number in the ring.\n";
+                throw std::runtime_error("there is no inverse for that number in the ring.\n");
                 return 0;
             }
             int y_cpy = y, N_cpy = N; 

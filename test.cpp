@@ -70,16 +70,16 @@ int main(){
     
     try{
         std::cout<< "Test for ring mod 10:\n";
-        Ring<10> c = 3;
-        Ring<10> d = 9;
+        Ring<10> c = 2;
+        Ring<10> d = 4;
         std::cout<< "Two numbers: \nc = " << c << " and d = "<< d <<"\n";
         std::cout<< "c+d: " << (c + d) <<"\n";
         std::cout<< "c-d: " << (c - d) <<"\n";
         std::cout<< "d-c: " << (d - c) <<"\n";
         std::cout<< "c*d: " << (c * d) <<"\n";
         std::cout<< "c/d: " << (c / d) <<"\n";
-    }catch(char const* e){
-        std::cout<<e;
+    }catch(const std::exception& e){
+        std::cout<<e.what();
     }
 
     std::cout<<"type the new b number (test std::cin)\n"; 
