@@ -3,14 +3,20 @@
 
 int main(){
     std::cout<< "Test for ring (field) mod 7:\n";
-    Ring<7> a = 5;
-    Ring<7> b = 3;
+
+    Ring<7> a(5);
+    Ring<7> b(3);
+
     std::cout<< "Two numbers: \na = " << a << " and b = "<< b <<"\n";
     std::cout<< "a+b: " << (a + b) <<"\n";
     std::cout<< "a-b: " << (a - b) <<"\n";
     std::cout<< "b-a: " << (b - a) <<"\n";
     std::cout<< "a*b: " << (a * b) <<"\n";
     std::cout<< "a/b: " << (a / b) <<"\n";
+    std::cout<< "a+b: " << (a + b) <<"\n";
+    std::cout<< "13+b: " << (13 + b) <<"\n";
+    std::cout<< "b+13: " << (b + 13) <<"\n";
+    std::cout<< "130+b: " << (50 + b) <<"\n";
 
     std::cout<< "a==b: " << (a == b) <<"\n";
     std::cout<< "a!=b: " << (a != b) <<"\n";
@@ -60,6 +66,8 @@ int main(){
     std::cout<< "b inversion: " << b.get_inverse() <<"\n";
 
 
+    
+    
     try{
         std::cout<< "Test for ring mod 10:\n";
         Ring<10> c = 3;
@@ -73,4 +81,9 @@ int main(){
     }catch(char const* e){
         std::cout<<e;
     }
+
+    std::cout<<"type the new b number (test std::cin)\n"; 
+    std::cin >> b;
+    std::cout<< "b: " << b <<"\n";
+    std::cout<< "b inversion: " << b.get_inverse() <<"\n";
 }
