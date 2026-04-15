@@ -15,7 +15,7 @@ class Ring{
          * @param a The number to find the GCD with N.
          * @return The greatest common divisor of a and N.
          */
-        static int gcd(const unsigned int a){
+        static unsigned int gcd(const unsigned int a){
             int a_cpy = a;
             int tmp;
             int N_cpy = N;
@@ -33,11 +33,10 @@ class Ring{
          * @return The multiplicative inverse of y modulo N.
          * @throws const char* Throws a string literal if a and N are not coprime (inverse doesn't exist).
          */
-        static int inverse(const unsigned int y){
-            if(gcd(y) != 1){
-                throw std::runtime_error("there is no inverse for that number in the ring.\n");
-                return 0;
-            }
+        static unsigned int inverse(const unsigned int y){
+            // if(gcd(y) != 1){
+               
+            // }
             int y_cpy = y, N_cpy = N; 
             int a0 = 1, a1 = 0;
             int q, tmp_y, tmp_a;
@@ -53,6 +52,10 @@ class Ring{
 
                 a0 = a1;
                 a1 = tmp_a - q * a1;
+            }
+            if(y_cpy != 1){
+                throw std::runtime_error("there is no inverse for that number in the ring.\n");
+                return 0;
             }
                     
             int a = a0;
