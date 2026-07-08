@@ -1,45 +1,25 @@
 #pragma once
 #include <iostream>
-#include <stdexcept>
 
 /**
  * @brief template class representing an element in modular ring or field modulo N.
- * This class handles arthmetic opertaions, inverses and comparisions in within integer quotient ring modulo N.
+ * This class handles arithmetic operations, inverses and comparisons within integer quotient ring modulo N.
  */
-template <unsigned int N>
+template <unsigned long long N>
 class Ring
 {
 private:
-    unsigned int x;
-
-    /**
-     * @brief Computes the greatest common divisor for argument and N.
-     * @param a The number to find the GCD with N.
-     * @return The greatest common divisor of a and N.
-     */
-    static unsigned int gcd(const unsigned int a)
-    {
-        int a_cpy = a;
-        int tmp;
-        int N_cpy = N;
-        while (a_cpy > 0)
-        {
-            tmp = a_cpy;
-            a_cpy = N_cpy % a_cpy;
-            N_cpy = tmp;
-        }
-        return N_cpy;
-    }
+    unsigned long long x;
 
     /**
      * @brief Calculates the modular multiplicative inverse using the Extended Euclidean Algorithm.
-     * * @param y The number to invert.
+     * @param y The number to invert.
      * @return The multiplicative inverse of y modulo N.
-     * @throws const char* Throws a string literal if a and N are not coprime (inverse doesn't exist).
+     * @throws std::runtime_error Throws a exception if y and N are not coprime (inverse doesn't exist).
      */
-    static unsigned int inverse(const unsigned int y)
+    static unsigned long long inverse(const unsigned long long y)
     {
-        int y_cpy = y, N_cpy = N;
+        unsigned long long y_cpy = y, N_cpy = N;
         int a0 = 1, a1 = 0;
         int q, tmp_y, tmp_a;
 
@@ -72,10 +52,10 @@ private:
 
     /**
      * @brief Calculates the additive inverse in modulo N.
-     * * @param y The number to find the additive inverse for.
+     * @param y The number to find the additive inverse for.
      * @return The additive inverse of y modulo N.
      */
-    static int inverse_for_sums(const unsigned int y)
+    static unsigned long long inverse_for_sums(const unsigned long long y)
     {
         return N - y;
     }
@@ -83,9 +63,9 @@ private:
 public:
     /**
      * @brief Default constructor initializing the ring element.
-     * * @param x The initial value (defaults to 0). It is automatically reduced modulo N.
+     * @param x The initial value (defaults to 0). It is automatically reduced modulo N.
      */
-    Ring(unsigned int x = 0)
+    Ring(unsigned long long x = 0)
     {
         this->x = x % N;
     }
@@ -94,7 +74,7 @@ public:
      * @brief Gets the underlying integer value.
      * @return The stored value x.
      */
-    unsigned int get()
+    unsigned long long get()
     {
         return this->x;
     }
@@ -103,21 +83,43 @@ public:
      * @brief Gets the multiplicative inverse of the current object.
      * @return The inverse value.
      */
-    int get_inverse()
+    unsigned long long get_inverse()
     {
         return inverse(this->x);
+    }
+
+    /**
+     * @brief Gets the value of the current object raised to the given power.
+     * @return The x'th power of object.
+     * @param x exponent.
+     */
+    Ring<N> pow(unsigned long long x)
+    {
+        unsigned long long exp = x;
+        Ring<N> result(1);
+        Ring<N> this_cpy(this->x);
+        while (exp > 0)
+        {
+            if (exp % 2 == 1)
+            {
+                result = result * this_cpy;
+            }
+            this_cpy *= this_cpy;
+            exp /= 2;
+        }
+        return result;
     }
 
     /**
      * @brief Gets the additive inverse of the current object.
      * @return The additive inverse value.
      */
-    int get_inverse_for_sums()
+    unsigned long long get_inverse_for_sums()
     {
         return inverse_for_sums(this->x);
     }
 
-    Ring &operator=(int new_x)
+    Ring &operator=(unsigned long long new_x)
     {
         this->x = (new_x % N);
         return *this;
@@ -143,7 +145,7 @@ public:
         return *this;
     }
 
-    // friend - can use with other types
+    // Friend functions to allow symmetric implicit conversions.
     friend Ring operator+(const Ring &right, const Ring &other)
     {
         return Ring((right.x + other.x) % N);
@@ -161,27 +163,27 @@ public:
         return Ring((right.x * Ring::inverse(other.x)) % N);
     }
 
-    bool operator==(const Ring &other) const
+    bool operator==(const Ring &other)
     {
         return ((this->x % N) == (other.x % N));
     }
-    bool operator!=(const Ring &other) const
+    bool operator!=(const Ring &other)
     {
         return ((this->x % N) != (other.x % N));
     }
-    bool operator<(const Ring &other) const
+    bool operator<(const Ring &other)
     {
         return ((this->x % N) < (other.x % N));
     }
-    bool operator>(const Ring &other) const
+    bool operator>(const Ring &other)
     {
         return ((this->x % N) > (other.x % N));
     }
-    bool operator<=(const Ring &other) const
+    bool operator<=(const Ring &other)
     {
         return ((this->x % N) <= (other.x % N));
     }
-    bool operator>=(const Ring &other) const
+    bool operator>=(const Ring &other)
     {
         return ((this->x % N) >= (other.x % N));
     }
@@ -191,7 +193,7 @@ public:
     }
     friend std::istream &operator>>(std::istream &is, Ring &r)
     {
-        unsigned int tmp;
+        unsigned long long tmp;
         if (is >> tmp)
             r.x = (tmp % N);
         return is;
